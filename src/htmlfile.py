@@ -1,11 +1,12 @@
-#encoding=UTF-8
-
+# encoding=UTF-8
+import os
 from textfile import textfile
 from htmltable import htmltable
 
+
 class htmlfile(textfile):
-    __head  = "<html>\n"
-    __tail  = "</html>\n"
+    __head = "<html>\n"
+    __tail = "</html>\n"
     __title = ""
 
     def __init__(self, name, encoding="utf-8"):
@@ -17,7 +18,8 @@ class htmlfile(textfile):
         self.title()
 
     def meta(self, http_equiv, content):
-        metaline = '<meta http-equiv="' + http_equiv + '" content="' + content + '">\n'
+        metaline = '<meta http-equiv="' + http_equiv + '" content="'\
+         + content + '">\n'
         self.write(metaline)
 
     def title(self):
@@ -31,17 +33,21 @@ class htmlfile(textfile):
         self.write(self.__tail)
 
     def header(self, text, level):
-        headerline = "<h" + str(level) + ">" + text + "</h" + str(level) + ">\n"
+        headerline = "<h" + str(level) + ">" + text\
+         + "</h" + str(level) + ">\n"
         self.write(headerline)
 
     def paragraph(self, text):
         paragraph_text = "<p>" + text + "</p>\n"
         self.write(paragraph_text)
 
+
 def test():
+    scriptpath = os.path.split(os.path.realpath(__file__))[0] + '/'
+    print(scriptpath)
     testfolder = "../test/"
     testfilename = "test.htm"
-    testfile = testfolder + testfilename
+    testfile = scriptpath + testfolder + testfilename
     f = htmlfile(testfile, "utf-8")
     f.open('w')
     f.set_title(u"test html 测试网页生成代码")
@@ -55,7 +61,7 @@ def test():
     f.paragraph("babababa dfjafabfhabfa")
     f.paragraph(u"测试中文段落")
 
-    listvals = [[1,2,3],[4,5,6],[7,8,9]]
+    listvals = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     table = htmltable()
     table.fromlist(listvals)
     tablehtml = table.tohtml()
@@ -64,9 +70,6 @@ def test():
 
     f.tail()
     f.close()
-
-
-
 
 if __name__ == '__main__':
     test()

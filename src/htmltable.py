@@ -1,4 +1,4 @@
-#encoding=UTF-8
+# encoding=UTF-8
 class htmlcell:
     __value = ""
     __row = 1
@@ -8,7 +8,8 @@ class htmlcell:
     __align = "center"
     __valign = "middle"
     __ishead = False
-    def __init__(self, row, col, value, rowspan=1, colspan=1, ishead = False):
+
+    def __init__(self, row, col, value, rowspan=1, colspan=1, ishead=False):
         self.__row = row
         self.__col = col
         self.__value = value
@@ -38,7 +39,8 @@ class htmlcell:
         if self.__valign != "middle":
             attr_valign = ' valign="' + self.valign + '"'
 
-        td_text = '<' + attr_type + attr_colspan + attr_rowspan + attr_valign + attr_align + '>'
+        td_text = '<' + attr_type + attr_colspan + attr_rowspan + attr_valign\
+            + attr_align + '>'
         td_text += attr_value
         td_text += '</' + attr_type + '>\n'
         return td_text
@@ -67,14 +69,14 @@ class htmlcell:
     def min_col(self):
         return min(self.cols())
 
-    def  __contains__(self, xy):
+    def __contains__(self, xy):
         return (xy[0] in self.rows()) and (xy[1] in self.cols())
 
     def range(self):
         '''
         cell covered area
         '''
-        return [(x,y) for x in self.rows() for y in self.cols()]
+        return [(x, y) for x in self.rows() for y in self.cols()]
 
     def __and__(self, other_cell):
         '''
@@ -100,13 +102,15 @@ class htmlcell:
         '''
         return (self & other_cell != [])
 
+
 class htmltable:
     __data = []
     __caption = ""
     __rowsize = 0
     __colsize = 0
     __border = 1
-    def __init__(self, data=[], caption = ""):
+
+    def __init__(self, data=[], caption=""):
         self.__data = data
         self.__caption = caption
         if len(self.__data) != 0:
@@ -114,19 +118,19 @@ class htmltable:
 
     def getcell(self, row, column):
         for cell in self.__data:
-            if (row,column) in cell:
+            if (row, column) in cell:
                 return cell
 
     def setcell(self, row, column, value):
         update_value = False
         for cell in self.__data:
-            if (row,column) in cell:
+            if (row, column) in cell:
                 index = self.__data.index(cell)
                 self.__data[index].setval(value)
                 update_value = True
 
-        if update_value == False:
-            self.__data.append(htmlcell(row,column,value))
+        if update_value is False:
+            self.__data.append(htmlcell(row, column, value))
             self.resize()
 
     def resize(self, rowsize=0, colsize=0):
@@ -152,7 +156,7 @@ class htmltable:
         for row in range(1, self.__rowsize+1):
             htmltext += '<tr>\n'
             for col in range(1, self.__colsize + 1):
-                cell = self.getcell(row,col)
+                cell = self.getcell(row, col)
                 if cell.row() == row and cell.col() == col:
                     htmltext += cell.tohtml()
             htmltext += '</tr>\n'
@@ -160,28 +164,26 @@ class htmltable:
         return htmltext
 
 
-
-
 def test():
-    cell = htmlcell(1,1,789,2,2)
-    xy1 = (3,4)
+    cell = htmlcell(1, 1, 789, 2, 2)
+    xy1 = (3, 4)
     print "xy1 in cell:", xy1 in cell
-    xy2 = (1,2)
+    xy2 = (1, 2)
     print "xy2 in cell:", xy2 in cell
-    print "cell.range():",cell.range()
+    print "cell.range():", cell.range()
 
-    cell2 = htmlcell(3,3,44)
-    cell3 = htmlcell(2,2,55,3,3)
+    cell2 = htmlcell(3, 3, 44)
+    cell3 = htmlcell(2, 2, 55, 3, 3)
 
-    print "cell & cell2:",cell & cell2
-    print "cell & cell3:",cell & cell3
+    print "cell & cell2:", cell & cell2
+    print "cell & cell3:", cell & cell3
     print "cell overlap cell2:", cell.overlap(cell2)
     print "cell overlap cell3:", cell.overlap(cell3)
     print "cell to html:", cell.tohtml()
     print "cell2 to html:", cell2.tohtml()
     print "cell3 to html:", cell3.tohtml()
 
-    listvals = [[1,2,3],[4,5,6],[7,8,9]]
+    listvals = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
     table = htmltable()
     table.fromlist(listvals)
     tablehtml = table.tohtml()
